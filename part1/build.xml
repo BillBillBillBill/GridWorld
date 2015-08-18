@@ -10,15 +10,16 @@
 
 	<target name="init">
 		<tstamp/>
+		<delete dir="${buildDir}"/>
 		<mkdir dir="${buildDir}"/>
 		<mkdir dir="${distDir}"/>
 	</target>
 
-	<target name="compile" depends="cleanbuild, init">
+	<target name="complie" depends="init">
 		<javac srcdir="${srcDir}" destdir="${buildDir}" debug="true"/>
 	</target>
 
-	<target name="dist" depends="compile">
+	<target name="dist" depends="complie">
 		<jar destfile="${distDir}/package-${DSTAMP}${TSTAMP}.jar" basedir="${buildDir}">
 			<manifest>
 				<attribute name="Built-By" value="13331093"/>
@@ -28,7 +29,7 @@
 		<jar destfile="${distDir}/package-src-${DSTAMP}${TSTAMP}.jar" basedir="${srcDir}"/>
 	</target>
 
-	<target name="cleanbuild">
+	<target name="test" depends="complie">
 		<delete dir="${buildDir}"/>
 	</target>
 
