@@ -197,7 +197,7 @@ class calculatorView extends JFrame {
 				}, 600);
 		}
 		if (!number2.matches(format)) {
-			operationNumber1.setBorder(new javax.swing.border.CompoundBorder(null, new LineBorder(Color.RED)));
+			operationNumber2.setBorder(new javax.swing.border.CompoundBorder(null, new LineBorder(Color.RED)));
 			java.util.Timer timer = new java.util.Timer(); 
 			timer.schedule(new TimerTask() {
 				public void run() {recoverBorder();}
