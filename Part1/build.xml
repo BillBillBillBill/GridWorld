@@ -40,14 +40,11 @@
 	</target>
 
 	<target name="junit">
-		<javac srcdir="${testDir}" destdir="${testDir}" classpathref="compile.path" fork="true" debug="true"/>
-		<javac srcdir="${srcDir}" destdir="${testDir}" classpathref="compile.path" fork="true" debug="true"/>
-		<junit printsummary="true">
-			<classpath path="${srcDir}"></classpath>
-			<classpath path="${lib.dir}"></classpath>
-			<classpath path="${testDir}"></classpath>
-			<test name="calculatorTest"></test>
-		</junit>
+		
+		<javac srcdir="${srcDir}" destdir="${testDir}" classpath=".:junit-4.9.jar:../src" fork="true" debug="true"/>
+		<javac srcdir="${testDir}" destdir="${testDir}" classpath=".:junit-4.9.jar:../src" fork="true" debug="true"/>
+		<java classname="CalculatorTest" classpath=".:junit-4.9.jar:../src" fork="true"/>
+
 	</target>
 
 	<target name="clean">
