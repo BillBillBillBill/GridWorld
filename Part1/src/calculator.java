@@ -1,8 +1,7 @@
 //package calculator;
 import java.awt.*;
 import java.util.*;
-import static org.junit.Assert.*;
-import org.junit.Test;
+
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -11,45 +10,60 @@ import java.util.ArrayList;
 
 public class calculator {
 	public static void main(String[] args) {
-		new calculatorView();
+		new CalculatorView();
 	}
 }
 
-class calculatorController {
-	public calculatorController() {
+class CalculatorController {
+
+	public CalculatorController() {
 		
 	}
+
 	public String calculate(Double number1, Double number2, String operator) {
-		if (operator.equals("+"))
-			return  String.valueOf(number1+number2);
-		else if (operator.equals("*"))
-			return  String.valueOf(number1*number2);
-		else if (operator.equals("/"))
-			return  String.valueOf(number1/number2);
-		else
-			return String.valueOf(number1-number2);
+		try{
+			if (operator.equals("+")) {
+				return  String.valueOf(number1+number2);
+			}
+			else if (operator.equals("*")) {
+				return  String.valueOf(number1*number2);
+			}
+			else if (operator.equals("/")) {
+				return  String.valueOf(number1/number2);
+			}
+			else if (operator.equals("-")) {
+				return String.valueOf(number1-number2);
+			}
+			else {
+				return "NaN";
+			}
+		} catch (Exception e) {
+			return "NaN";
+		}
+		
 	}
 }
 
-class calculatorView extends JFrame {
-	JPanel numberRow = new JPanel();
-	JPanel operationRow = new JPanel();
+class CalculatorView extends JFrame {
+
+	private JPanel numberRow = new JPanel();
+	private JPanel operationRow = new JPanel();
 	
-	JTextField operationNumber1 = new JTextField();
-	JLabel operationSigh = new JLabel("+");
-	JTextField operationNumber2 = new JTextField();
-	JLabel equalSigh = new JLabel("=");
-	JTextField resultField = new JTextField("");
+	private JTextField operationNumber1 = new JTextField();
+	private JLabel operationSigh = new JLabel("+");
+	private JTextField operationNumber2 = new JTextField();
+	private JLabel equalSigh = new JLabel("=");
+	private JTextField resultField = new JTextField("");
 	
-	JButton addButton = new JButton("+");
-	JButton decButton = new JButton("-");
-	JButton mulButton = new JButton("*");
-	JButton divButton = new JButton("/");
-	JButton okButton = new JButton("OK");
-	calculatorController calculator = new calculatorController();
+	private JButton addButton = new JButton("+");
+	private JButton decButton = new JButton("-");
+	private JButton mulButton = new JButton("*");
+	private JButton divButton = new JButton("/");
+	private JButton okButton = new JButton("OK");
+	private CalculatorController calculator = new CalculatorController();
 
 	//@SuppressWarnings({ "rawtypes", "unchecked" })
-	public calculatorView() {
+	public CalculatorView() {
 		setTitle("计算器");
 		setSize(400, 400);
 		

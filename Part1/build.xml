@@ -6,7 +6,13 @@
 	<property name="srcDir" location="src"/>
 	<property name="buildDir" location="build"/>
 	<property name="distDir" location="dist"/>
+	<property name="testDir" location="test"/>
+	<property name="lib.dir" value="lib"/>
 
+
+	<path id="compile.path">
+		<pathelement location="${lib.dir}/junit-3.8.1.jar"/>
+	</path>
 
 	<target name="init">
 		<tstamp/>
@@ -16,7 +22,7 @@
 	</target>
 
 	<target name="complie" depends="init">
-		<javac srcdir="${srcDir}" destdir="${buildDir}" debug="true"/>
+		<javac srcdir="${srcDir}" destdir="${buildDir}" fork="true" debug="true"/>
 	</target>
 
 	<target name="dist" depends="complie">
@@ -29,8 +35,19 @@
 		<jar destfile="${distDir}/package-src-${DSTAMP}${TSTAMP}.jar" basedir="${srcDir}"/>
 	</target>
 
-	<target name="test" depends="complie">
-		<delete dir="${buildDir}"/>
+	<target name="run" depends="complie">
+		<java classname="calculator" fork="true" classpath="${buildDir}"/>
+	</target>
+
+	<target name="junit">
+		<javac srcdir="${testDir}" destdir="${testDir}" classpathref="compile.path" fork="true" debug="true"/>
+		<javac srcdir="${srcDir}" destdir="${testDir}" classpathref="compile.path" fork="true" debug="true"/>
+		<junit printsummary="true">
+			<classpath path="${srcDir}"></classpath>
+			<classpath path="${lib.dir}"></classpath>
+			<classpath path="${testDir}"></classpath>
+			<test name="calculatorTest"></test>
+		</junit>
 	</target>
 
 	<target name="clean">
