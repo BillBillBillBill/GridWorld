@@ -1,0 +1,6 @@
+Commands:
+
+ant runCircleBug -run the CircleBug
+ant runZBug		 -run the runZBug
+ant runSpiralBug -run the runSpiralBug
+ant runDancingBug-run the runDancingBug

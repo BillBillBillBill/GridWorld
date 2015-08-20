@@ -13,7 +13,8 @@
 
 import info.gridworld.actor.Bug;
 
-
+// SpiralBug Class
+// extend from Bug
 public class SpiralBug extends Bug
 {
     private int steps;
@@ -24,15 +25,17 @@ public class SpiralBug extends Bug
      */
     public SpiralBug(int length)
     {
+        // initialize the steps and sideLength
         steps = 0;
         sideLength = length;
     }
 
     /**
-     * Moves to the next location of the square.
+     * Moves to the next location.
      */
     public void act()
     {
+        // try to move to next location
         if (steps < sideLength && canMove())
         {
             move();
@@ -40,6 +43,7 @@ public class SpiralBug extends Bug
         }
         else
         {
+            // adjust the side length when the bug turns
             sideLength++;
             turn();
             turn();

@@ -13,27 +13,29 @@
 
 import info.gridworld.actor.Bug;
 
-
+// CircleBug Class
+// extend from Bug
 public class CircleBug extends Bug
 {
     private int steps;
     private int sideLength;
-
 
     /**
      * @param length the side length
      */
     public CircleBug(int length)
     {
+        // initialize the steps and sideLength
         steps = 0;
         sideLength = length;
     }
 
     /**
-     * Moves to the next location of the square.
+     * Moves to the next location.
      */
     public void act()
     {
+        // try to move to next location
         if (steps < sideLength && canMove())
         {
             move();
@@ -41,6 +43,7 @@ public class CircleBug extends Bug
         }
         else
         {
+            // turn only once, 45 degrees
             turn();
             steps = 0;
         }

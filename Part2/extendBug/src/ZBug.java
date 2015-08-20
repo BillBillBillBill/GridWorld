@@ -10,15 +10,17 @@
  * 
  * @13331093
  */
-
 import info.gridworld.actor.Bug;
 
-
+// ZBug Class
+// extend from Bug
 public  class ZBug extends Bug
 {
     private int steps;
     private int sideLength;
     private int moveTime;
+
+    // define the constant
     private static final int EAST = 90;
     private static final int SOUTHWEST = 225;
     private static final int ZPATTERNLENGTH = 4;
@@ -34,6 +36,7 @@ public  class ZBug extends Bug
         steps = 0;
         sideLength = ZPATTERNLENGTH;
         moveTime = 0;
+        // at first it should face east
         setDirection(EAST);
     }
 
@@ -42,11 +45,12 @@ public  class ZBug extends Bug
      */
     public void act()
     {
-
+        // if complete the Z pattern or ZBug can't move it stop
         if (moveTime >= MAXMOVETIME || (!canMove() && steps != ZPATTERNLENGTH))
         {
             return;
         }
+        // move to next location
         if (steps < sideLength)
         {
             move();
@@ -58,14 +62,17 @@ public  class ZBug extends Bug
         }
         else
         {
+            // complete the first '-'
             if (moveTime == FIRSTTURN)
             {
                 setDirection(SOUTHWEST);
             }
+            // complete the '/'
             if (moveTime == SECONDTURN)
             {
                 setDirection(EAST);
             }
+            // start a new way
             steps = 0;
         }
     }

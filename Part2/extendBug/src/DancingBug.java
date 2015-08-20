@@ -14,16 +14,21 @@
 import info.gridworld.actor.Bug;
 import java.util.Arrays;
 
+// DancingBug Class
+// extend from Bug
+// making different turns before each move. 
 public class DancingBug extends Bug
 {
     private int turnIndex;
     private int[] turnOrder;
     /**
-     * @param length the side length
+     * @param turnList is the turn Order
      */
     public DancingBug(int[] turnList)
     {
+        // initialize the turnIndex
         turnIndex = 0;
+        // get turnOrder from the parameter
         if(turnList == null) { 
             this.turnOrder = new int[0]; 
         } else {
@@ -32,17 +37,21 @@ public class DancingBug extends Bug
     }
 
     /**
-     * Moves to the next location of the square.
+     * Moves to the next location.
      */
     public void act()
     {
+        // turn turnOrder[turnIndex] times
         for (int i = 0; i < turnOrder[turnIndex]; i++) {
             turn();
         }
         turnIndex++;
+        // After carrying out the last turn in the array
+        //it start again with the initial array value
         if (turnIndex >= turnOrder.length) {
             turnIndex = 0;
         }
+        // move to next location
         if (canMove())
         {
             move();

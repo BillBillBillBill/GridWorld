@@ -23,6 +23,7 @@ public final class ZBugRunner
     }
     public static void main(String[] args)
     {
+        // define the parameter
         final int aliceLocationX = 7;
         final int aliceLocationY = 8;
         final int bobLocationX = 5;
