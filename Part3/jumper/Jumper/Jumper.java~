@@ -1,0 +1,64 @@
+import info.gridworld.actor.Actor;  
+import info.gridworld.grid.Grid;
+import info.gridworld.grid.Location;
+import java.awt.Color;
+
+public class Jumper extends Actor
+{
+    public Jumper()      //initialize
+    {
+        setColor(Color.BLUE);
+    }
+    public Jumper(Color bugColor)
+    {
+        setColor(bugColor);
+    }
+    public void act()     //act
+    {
+        if (canMove()) {
+            move(); 
+        }
+        else
+        {
+            turn();
+        }
+    }
+    public void turn()       //turn 45 degree
+    {
+        setDirection(getDirection() + Location.HALF_RIGHT);
+    }
+    public void move()
+    {
+        Grid<Actor> gr = getGrid();
+        if (gr == null) {
+            return;
+        }
+        Location loc = getLocation();   //get current location
+        Location next1 = loc.getAdjacentLocation(getDirection()); //the next location
+        Location next2 = next1.getAdjacentLocation(getDirection());  //move two cells
+        if (gr.isValid(next2)) {
+            moveTo(next2);
+        }
+    }
+    public boolean canMove()
+    {
+        Location loc = getLocation();
+        Location next1 = loc.getAdjacentLocation(getDirection());   //the next location
+        Location next2 = next1.getAdjacentLocation(getDirection());  //the next and next location 
+        return canmove2(next2);
+    }
+    public boolean canmove2 (Location a) {
+        Grid<Actor> gr = getGrid();
+        if (gr == null) {
+            return false;
+        }
+        if (!gr.isValid(a)) {    //valid or not                        
+            return false;
+        }
+        Actor neighbor = gr.get(a);
+        return (neighbor == null);
+        // ok to move into empty location or onto flower
+        // not ok to move onto any other actor 
+    }
+}
+

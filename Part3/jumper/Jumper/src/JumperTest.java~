@@ -1,0 +1,27 @@
+import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import info.gridworld.actor.ActorWorld;
+import info.gridworld.grid.Location;
+import info.gridworld.actor.Flower; 
+import info.gridworld.actor.Rock; 
+import info.gridworld.grid.Grid; 
+import java.awt.Color;
+
+public class JumperTest {
+    private Jumper1 = new Jumper();
+    private world = new World();
+    @Before
+    public void setUp() throws Exception {
+    }
+    @After
+    public void tearDown() throws Exception {
+    }
+    @Test
+    public void testbegin() {
+        assertEquals(Jumper1.getColor(), Color.RED);
+    }
+}
+

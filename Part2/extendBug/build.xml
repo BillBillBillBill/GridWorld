@@ -25,7 +25,7 @@
 
 	<!-- Compile all -->
 	<target name="compile" depends="init">
-		<javac srcdir="${srcDir}" destdir="${buildDir}" fork="true" >
+		<javac srcdir="${srcDir}" destdir="${buildDir}" fork="true" includeantruntime="on" >
 			<classpath refid="compile.classpath"/> 
 		</javac>
 	</target>

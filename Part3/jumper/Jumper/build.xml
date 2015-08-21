@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<project default="run" name="Jumper">
+	
+	<description>Jumper</description>
+
+	<property name="srcDir" location="src"/>
+	<property name="buildDir" location="build"/>
+	<property name="distDir" location="dist"/>
+	<property name="testDir" location="test"/>
+	<property name="libDir" value="lib" />  
+
+	<!-- Define the class path -->
+	<path id="compile.classpath">
+		<fileset dir="${libDir}">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement location="${buildDir}" />
+	</path>
+
+	<!-- make new dir -->
+	<target name="init">
+		<tstamp/>
+		<mkdir dir="${buildDir}"/>
+		<mkdir dir="${distDir}"/>
+	</target>
+
+	<!-- Compile it -->
+	<target name="compile" depends="init">
+		<javac srcdir="${srcDir}" destdir="${buildDir}" fork="true" >
+			<classpath refid="compile.classpath"/> 
+		</javac>
+	</target>
+
+	<!-- About the JumperRunner Jar and Run -->
+	<target name="jar" depends="compile">
+		<jar destfile="${distDir}/JumperRunner.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Built-By" value=""/>
+				<attribute name="Main-Class" value="JumperRunner"/>
+				<attribute name="Class-Path" value="${libDir}/gridworld.jar"/>
+			</manifest>
+			<zipfileset excludes="META-INF/*.SF" src="${libDir}/gridworld.jar"/>
+		</jar>
+	</target>
+
+	<target name="run" depends="jar">
+		<java jar="${distDir}/JumperRunner.jar" fork="true">
+		</java>
+	</target>
+
+	<!-- About the JumperRunner test-->
+	<target name="test" depends="jar">
+		<exec executable="/bin/sh">
+			<arg line="${testDir}/runTest.sh"/>
+		</exec>
+	</target>
+
+	<target name="clean">
+		<delete dir="${buildDir}"/>
+		<delete dir="${distDir}"/>
+	</target>
+
+</project>
