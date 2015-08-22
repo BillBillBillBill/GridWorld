@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<project default="run" name=">Cell">
+	
+	<description>Cell</description>
+
+	<property name="srcDir" location="src"/>
+	<property name="buildDir" location="build"/>
+	<property name="distDir" location="dist"/>
+	<property name="libDir" value="lib" />  
+
+	<!-- Define the class path -->
+	<path id="compile.classpath">
+		<fileset dir="${libDir}">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement location="${buildDir}" />
+		<pathelement location="${srcDir}" />
+	</path>
+
+	<!-- make new dir -->
+	<target name="init">
+		<tstamp/>
+		<mkdir dir="${buildDir}"/>
+		<mkdir dir="${distDir}"/>
+	</target>
+
+	<!-- Compile all -->
+	<target name="compile" depends="init">
+		<javac srcdir="${srcDir}" destdir="${buildDir}" fork="true" includeantruntime="on" >
+			<classpath refid="compile.classpath"/> 
+		</javac>
+	</target>
+
+	<!-- About the Cell -->
+	<target name="Jar" depends="init, compile">
+		<jar destfile="${distDir}/CellRunner.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Built-By" value="13331093"/>
+				<attribute name="Main-Class" value="CellRunner"/>
+				<attribute name="Class-Path" value="${libDir}/gridworld.jar"/>
+			</manifest>
+			<zipfileset excludes="META-INF/*.SF" src="${libDir}/gridworld.jar"/>
+		</jar>
+	</target>
+
+	<target name="run" depends="Jar">
+		<java jar="${distDir}/CellRunner.jar" fork="true">
+		</java>
+	</target>
+
+
+	<target name="clean">
+		<delete dir="${buildDir}"/>
+		<delete dir="${distDir}"/>
+	</target>
+
+</project>

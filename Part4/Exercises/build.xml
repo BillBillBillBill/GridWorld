@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<project default="compile" name=">Par4Exercise">
+	
+	<description>Par4 Exercise</description>
+
+	<property name="srcDir" location="src"/>
+	<property name="buildDir" location="build"/>
+	<property name="distDir" location="dist"/>
+	<property name="libDir" value="lib" />  
+
+	<!-- Define the class path -->
+	<path id="compile.classpath">
+		<fileset dir="${libDir}">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement location="${buildDir}" />
+	</path>
+
+	<!-- make new dir -->
+	<target name="init">
+		<tstamp/>
+		<mkdir dir="${buildDir}"/>
+		<mkdir dir="${distDir}"/>
+	</target>
+
+	<!-- Compile all -->
+	<target name="compile" depends="init">
+		<javac srcdir="${srcDir}" destdir="${buildDir}" fork="true" includeantruntime="on" >
+			<classpath refid="compile.classpath"/> 
+		</javac>
+	</target>
+
+	<!-- About the ModifiedChameleonCritter -->
+	<target name="ModifiedChameleonCritterJar" depends="init, compile">
+		<jar destfile="${distDir}/ModifiedChameleonCritterRunner.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Built-By" value="13331093"/>
+				<attribute name="Main-Class" value="ModifiedChameleonCritterRunner"/>
+				<attribute name="Class-Path" value="${libDir}/gridworld.jar"/>
+			</manifest>
+			<zipfileset excludes="META-INF/*.SF" src="${libDir}/gridworld.jar"/>
+		</jar>
+	</target>
+
+	<target name="runModifiedChameleonCritter" depends="ModifiedChameleonCritterJar">
+		<java jar="${distDir}/ModifiedChameleonCritterRunner.jar" fork="true">
+		</java>
+	</target>
+
+	<!-- About the ChameleonKid -->
+	<target name="runChameleonKid" depends="ChameleonKidJar">
+		<java jar="${distDir}/ChameleonKidRunner.jar" fork="true">
+		</java>
+	</target>
+
+	<target name="ChameleonKidJar" depends="init, compile">
+		<jar destfile="${distDir}/ChameleonKidRunner.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Built-By" value="13331093"/>
+				<attribute name="Main-Class" value="ChameleonKidRunner"/>
+				<attribute name="Class-Path" value="${libDir}/gridworld.jar"/>
+			</manifest>
+			<zipfileset excludes="META-INF/*.SF" src="${libDir}/gridworld.jar"/>
+		</jar>
+	</target>
+
+	<!-- About the BlusterCritter -->
+	<target name="BlusterCritterJar" depends="init, compile">
+		<jar destfile="${distDir}/BlusterCritterRunner.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Built-By" value="13331093"/>
+				<attribute name="Main-Class" value="BlusterCritterRunner"/>
+				<attribute name="Class-Path" value="${libDir}/gridworld.jar"/>
+			</manifest>
+			<zipfileset excludes="META-INF/*.SF" src="${libDir}/gridworld.jar"/>
+		</jar>
+	</target>
+
+	<target name="runBlusterCritter" depends="BlusterCritterJar">
+		<java jar="${distDir}/BlusterCritterRunner.jar" fork="true">
+		</java>
+	</target>
+
+	<!-- About the KingCrab -->
+	<target name="KingCrabJar" depends="init, compile">
+		<jar destfile="${distDir}/KingCrabRunner.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Built-By" value="13331093"/>
+				<attribute name="Main-Class" value="KingCrabRunner"/>
+				<attribute name="Class-Path" value="${libDir}/gridworld.jar"/>
+			</manifest>
+			<zipfileset excludes="META-INF/*.SF" src="${libDir}/gridworld.jar"/>
+		</jar>
+	</target>
+
+	<target name="runKingCrab" depends="KingCrabJar">
+		<java jar="${distDir}/KingCrabRunner.jar" fork="true">
+		</java>
+	</target>
+
+	<!-- About the QuickCrab -->
+	<target name="QuickCrabJar" depends="init, compile">
+		<jar destfile="${distDir}/QuickCrabRunner.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Built-By" value="13331093"/>
+				<attribute name="Main-Class" value="QuickCrabRunner"/>
+				<attribute name="Class-Path" value="${libDir}/gridworld.jar"/>
+			</manifest>
+			<zipfileset excludes="CrabCritter.gif" src="${srcDir}/CrabCritter.gif"/>
+			<zipfileset excludes="META-INF/*.SF" src="${libDir}/gridworld.jar"/>
+		</jar>
+	</target>
+
+	<target name="runQuickCrab" depends="QuickCrabJar">
+		<java jar="${distDir}/QuickCrabRunner.jar" fork="true">
+		</java>
+	</target>
+
+	<!-- About the RockHound -->
+	<target name="RockHoundJar" depends="init, compile">
+		<jar destfile="${distDir}/RockHoundRunner.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Built-By" value="13331093"/>
+				<attribute name="Main-Class" value="RockHoundRunner"/>
+				<attribute name="Class-Path" value="${libDir}/gridworld.jar"/>
+			</manifest>
+			<zipfileset excludes="META-INF/*.SF" src="${libDir}/gridworld.jar"/>
+		</jar>
+	</target>
+
+	<target name="runRockHound" depends="RockHoundJar">
+		<java jar="${distDir}/RockHoundRunner.jar" fork="true">
+		</java>
+	</target>
+
+	<!-- About the CrabCritter -->
+	<target name="CrabCritterJar" depends="init, compile">
+		<jar destfile="${distDir}/CrabRunner.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Built-By" value="13331093"/>
+				<attribute name="Main-Class" value="CrabRunner"/>
+				<attribute name="Class-Path" value="${libDir}/gridworld.jar"/>
+			</manifest>
+			<zipfileset excludes="META-INF/*.SF" src="${libDir}/gridworld.jar"/>
+		</jar>
+	</target>
+
+	<target name="runCrabCritter" depends="CrabCritterJar">
+		<java jar="${distDir}/CrabRunner.jar" fork="true">
+		</java>
+	</target>
+
+
+	<target name="clean">
+		<delete dir="${buildDir}"/>
+		<delete dir="${distDir}"/>
+	</target>
+
+</project>
