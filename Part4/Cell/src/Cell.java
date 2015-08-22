@@ -30,7 +30,7 @@ public class Cell extends Critter {
     public Cell() {
     	type = (int)(Math.random() * 3);
     	age = 0;
-    	maxAge = 20;
+    	maxAge = 100;
     	generation = 0;
     	color = COLOR_LIST[type];
     }
@@ -48,7 +48,7 @@ public class Cell extends Critter {
     		greennum++;
     	}
     	age = 0;
-    	maxAge = 200;
+    	maxAge = 100;
     	this.color = COLOR_LIST[type];
     	this.generation = generation;
     }
