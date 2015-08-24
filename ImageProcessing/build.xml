@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<project default="run" name=">ImageProcessing">
+	
+	<description>ImageProcessing</description>
+
+	<property name="srcDir" location="src"/>
+	<property name="buildDir" location="build"/>
+	<property name="distDir" location="dist"/>
+	<property name="libDir" value="lib" />  
+	<property name="testDir" value="test" />  
+
+	<!-- Define the class path -->
+	<path id="compile.classpath">
+		<fileset dir="${libDir}">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement location="${buildDir}" />
+		
+	</path>
+
+	<!-- make new dir -->
+	<target name="init">
+		<tstamp/>
+		<mkdir dir="${buildDir}"/>
+		<mkdir dir="${distDir}"/>
+	</target>
+
+	<!-- Compile all -->
+	<target name="compile" depends="init">
+		<javac srcdir="${srcDir}" destdir="${buildDir}" fork="true" includeantruntime="on" >
+			<classpath refid="compile.classpath"/> 
+		</javac>
+	</target>
+
+	<!-- About the ModifiedChameleonCritter -->
+	<target name="jar" depends="init, compile">
+		<jar destfile="${distDir}/ImageReaderRunner.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Built-By" value="13331093"/>
+				<attribute name="Main-Class" value="ImageReaderRunner"/>
+				<attribute name="Class-Path" value=".:${libDir}/appframework-1.0.3.jar:${libDir}/ImageReader.jar:${libDir}/swing-worker-1.1.jar"/>
+			</manifest>
+			<zipfileset excludes="META-INF/*.SF" src="${libDir}/appframework-1.0.3.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="${libDir}/ImageReader.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="${libDir}/swing-worker-1.1.jar"/>
+		</jar>
+	</target>
+
+	<target name="run" depends="jar">
+		<java jar="${distDir}/ImageReaderRunner.jar" fork="true">
+		</java>
+	</target>
+
+		<!-- About the JumperRunner test-->
+	<target name="test" depends="jar">
+		<exec executable="/bin/sh">
+			<arg line="${testDir}/runTest.sh"/>
+		</exec>
+	</target>
+
+	<target name="clean">
+		<delete dir="${buildDir}"/>
+		<delete dir="${distDir}"/>
+	</target>
+
+</project>
