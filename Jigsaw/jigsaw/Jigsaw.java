@@ -19,6 +19,11 @@ public class Jigsaw {
 	private Vector<JigsawNode> solutionPath;// 解路径  ：用以保存从起始状态到达目标状态的移动路径中的每一个状态节点
 	private boolean isCompleted;	// 完成标记：初始为false;当求解成功时，将该标记至为true
 	private int searchedNodesNum;	// 已访问节点数： 用以记录所有访问过的节点的数量
+	
+	private double allMD = 0;
+	private double allED = 0;
+	private double allWrongPosAtAfterNodeNumFactor = 0;
+	private int calNodeNum = 0;
 
 	/**拼图构造函数
 	 * @param bNode - 初始状态节点
@@ -248,7 +253,6 @@ public class Jigsaw {
 		String filePath = "BFSearchDialog.txt";
 		PrintWriter pw = new PrintWriter(new FileWriter(filePath));
 		// *************************************
-		int maxNodesNum = 25000; 
 		// 用以存放某一节点的邻接节点
 		Vector<JigsawNode> followJNodes = new Vector<JigsawNode>(); 
 
@@ -305,8 +309,8 @@ public class Jigsaw {
 		String filePath = "ASearchDialog.txt";
 		PrintWriter pw = new PrintWriter(new FileWriter(filePath));
 		
-		// 访问节点数大于30000个则认为搜索失败
-		int maxNodesNum = 30000;  
+		// 访问节点数大于25000个则认为搜索失败
+		int maxNodesNum = 25000;  
 		
 		// 用以存放某一节点的邻接节点
 		Vector<JigsawNode> followJNodes = new Vector<JigsawNode>(); 
@@ -357,13 +361,130 @@ public class Jigsaw {
 	 * @param jNode - 要计算代价估计值的节点；此函数会改变该节点的estimatedValue属性值。
 	 */
 	private void estimateValue(JigsawNode jNode) {
-		int s = 0; // 后续节点不正确的数码个数
-		int dimension = JigsawNode.getDimension();
+		int[] nodesState = jNode.getNodesState();
+		int[] distNodesState = endJNode.getNodesState();
+		int dimension = jNode.getDimension();
+		double estimatevalue = 0;
+
+		calNodeNum++;
+		
+		
+		double wrongPosAtAfterNodeNumFactor = 3;
+		double wrongPosNumFactor = 0;
+		double totalManhattanDistanceOfWrongAndRightPosFactor = 5;
+		double totalEuclideanDistanceOfWrongAndRightPosFactor = 4;
+
+		
+		// 后续节点不正确的数码个数
+		double wrongPosAtAfterNodeNum = 0; 
 		for(int index =1 ; index<dimension*dimension; index++){
-			if(jNode.getNodesState()[index]+1!=jNode.getNodesState()[index+1])
-				s++;
+			if(nodesState[index]+1 != nodesState[index+1])
+				wrongPosAtAfterNodeNum++;
 		}
-		jNode.setEstimatedValue(s);
+		
+		// 放错位的数码
+		int wrongPosNum = 0;
+		
+		// 所有 放错位的数码与其正确位置的曼哈顿距离 之和
+		double totalManhattanDistanceOfWrongAndRightPos = 0;
+		
+		// 所有 放错位的数码与其正确位置的欧几里得距离 之和
+		double totalEuclideanDistanceOfWrongAndRightPos = 0;
+		
+		for (int i = 1; i < dimension*dimension; i++) {
+			if (nodesState[i] != distNodesState[i] && nodesState[i] != 0) {
+				wrongPosNum++;
+
+//				for (int j = 1; j < dimension*dimension; j++) {
+//					if (distNodesState[j] == nodesState[i]) {
+//						// 曼哈顿距离
+//						totalManhattanDistanceOfWrongAndRightPos += calManhattanDistance(i, j, dimension);
+//						// 欧几里得距离
+//						totalEuclideanDistanceOfWrongAndRightPos += calEuclideanDistance(i, j, dimension);
+//						break;
+//					}
+//				}
+				// 曼哈顿距离
+				totalManhattanDistanceOfWrongAndRightPos += calManhattanDistance(i, nodesState[i], dimension);
+				// 欧几里得距离
+				totalEuclideanDistanceOfWrongAndRightPos += calEuclideanDistance(i, nodesState[i], dimension);
+			}
+		}
+		if (searchedNodesNum < 5000) {
+		allMD += totalManhattanDistanceOfWrongAndRightPos;
+		allED += totalEuclideanDistanceOfWrongAndRightPos;
+		allWrongPosAtAfterNodeNumFactor += wrongPosAtAfterNodeNum;
+		double adjustMD = totalManhattanDistanceOfWrongAndRightPos / (allMD / calNodeNum);
+		double adjustED = totalEuclideanDistanceOfWrongAndRightPos / (allED / calNodeNum);
+		double adjustwrongPosAtAfterNodeNumFactor = wrongPosAtAfterNodeNum / (allWrongPosAtAfterNodeNumFactor / calNodeNum);
+		
+		
+		if (adjustMD < 1 &&  0.75 < adjustMD) {
+			adjustMD *= 0.75;
+		} 
+		if (adjustED < 1 &&  0.85 < adjustED) {
+			adjustED *= 0.85;
+		} 
+		if (adjustwrongPosAtAfterNodeNumFactor < 1 && 0.7 < adjustwrongPosAtAfterNodeNumFactor) {
+			adjustwrongPosAtAfterNodeNumFactor *= 0.9;
+		} 
+		
+		totalManhattanDistanceOfWrongAndRightPosFactor = totalManhattanDistanceOfWrongAndRightPosFactor * adjustMD;
+		totalEuclideanDistanceOfWrongAndRightPosFactor = totalEuclideanDistanceOfWrongAndRightPosFactor * adjustED;
+		wrongPosAtAfterNodeNumFactor = wrongPosAtAfterNodeNumFactor * adjustwrongPosAtAfterNodeNumFactor;
+		}
+//		System.out.println("WrongPosAtAfterNodeNum:" + wrongPosAtAfterNodeNum);
+//		//System.out.println("WrongPosNum:" + wrongPosNum);
+//		System.out.println("ManhattanDistance:" + totalManhattanDistanceOfWrongAndRightPos);
+//		System.out.println("EuclideanDistanceOfWrongAndRightPos:" + totalEuclideanDistanceOfWrongAndRightPos);
+//		
+//		System.out.println("totalManhattanDistanceOfWrongAndRightPosFactor:" + totalManhattanDistanceOfWrongAndRightPosFactor);
+//		System.out.println("totalEuclideanDistanceOfWrongAndRightPosFactor:" + totalEuclideanDistanceOfWrongAndRightPosFactor);
+//		System.out.println("wrongPosAtAfterNodeNumFactor:" + wrongPosAtAfterNodeNumFactor);
+//		
+//		
+		
+		estimatevalue = (int)(totalManhattanDistanceOfWrongAndRightPosFactor * totalManhattanDistanceOfWrongAndRightPos
+				+ totalEuclideanDistanceOfWrongAndRightPosFactor * totalEuclideanDistanceOfWrongAndRightPos
+				+ wrongPosAtAfterNodeNumFactor * wrongPosAtAfterNodeNum)
+				+ wrongPosNum * wrongPosNumFactor;
+		//System.out.println("estimatevalue:" + estimatevalue);
+		jNode.setEstimatedValue((int)estimatevalue);
+	}
+	
+	public int calManhattanDistance(int pos1, int pos2, int dimension) {
+		int manhattanDis = 0;
+		int x1 = (pos1 - 1) % dimension;
+		int y1 = (pos1 - 1) / dimension;
+		int x2 = (pos2 - 1) % dimension;
+		int y2 = (pos2 - 1) / dimension;
+		
+		
+		manhattanDis += Math.abs(x1 - x2);
+		manhattanDis += Math.abs(y1 - y2);
+		
+//		System.out.println("pos1:" + pos1);
+//		System.out.println("pos2:" + pos2);
+//		System.out.println("manhattanDis:" + manhattanDis);
+		
+		return manhattanDis;
+	}
+	
+	public double calEuclideanDistance(int pos1, int pos2, int dimension) {
+		double euclideanDis = 0;
+		int x1 = (pos1 - 1) % dimension;
+		int y1 = (pos1 - 1) / dimension;
+		int x2 = (pos2 - 1) % dimension;
+		int y2 = (pos2 - 1) / dimension;
+		
+		
+		euclideanDis += Math.sqrt(Math.abs(x1 - x2) * Math.abs(x1 - x2) + Math.abs(y1 - y2) * Math.abs(y1 - y2));
+		
+//		System.out.println("pos1:" + pos1);
+//		System.out.println("pos2:" + pos2);
+//		System.out.println("euclideanDis:" + euclideanDis);
+		
+		return euclideanDis;
 	}
 
 }
